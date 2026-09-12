@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/api.ts","./src/main.tsx","./src/types.ts","./src/components/chaospanel.tsx","./src/components/eventlog.tsx","./src/components/inventorypanel.tsx","./src/components/kpispanel.tsx","./src/components/orderspanel.tsx","./src/components/panel.tsx","./src/components/shipmentspanel.tsx","./src/components/tracepanel.tsx"],"version":"5.9.3"}

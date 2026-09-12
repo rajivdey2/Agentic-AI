@@ -1,0 +1,1 @@
+"""Graph nodes: monitor → detect → retrieve → optimize → decide → execute → verify → (loop/escalate)."""
