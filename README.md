@@ -25,8 +25,8 @@ clock ──▶ append-only event log ──▶ projections (state/KPIs/issues)
   tools, a deterministic replan loop on failed verification, and an
   `escalate_to_human` branch after two failures.
 - **LLM (optional)**: `decide` narrates the chosen trade-off via
-  `ANTHROPIC_API_KEY`/`OPENAI_API_KEY`; a deterministic fallback keeps the demo
-  moving when no key is set.
+  `OPENROUTER_API_KEY`/`GEMINI_API_KEY`/`GROQ_API_KEY`/`ANTHROPIC_API_KEY`/`OPENAI_API_KEY`
+  (checked in that order); a deterministic fallback keeps the demo moving when no key is set.
 - **Frontend**: React + Vite + Tailwind, live-updating KPIs, orders, shipments,
   inventory, decision trace, chaos triggers and the audit log.
 
@@ -88,11 +88,34 @@ python tools/report.py --demo
 | `GROQ_API_KEY` | `""` | Optional Groq narration (OpenAI-compatible) |
 | `GROQ_MODEL` | `openai/gpt-oss-120b` | Groq model id |
 | `GROQ_BASE_URL` | `https://api.groq.com/openai/v1` | Groq endpoint |
+| `GEMINI_API_KEY` | `""` | Optional Gemini narration (OpenAI-compatible) |
+| `GEMINI_MODEL` | `gemini-3.8-flash` | Gemini model id |
+| `GEMINI_BASE_URL` | `https://generativelanguage.googleapis.com/v1beta/openai/v1` | Gemini endpoint |
+| `OPENROUTER_API_KEY` | `""` | Optional OpenRouter narration (OpenAI-compatible) |
+| `OPENROUTER_MODEL` | `inclusionai/ling-3.0-flash-vl:free` | OpenRouter model id |
+| `OPENROUTER_BASE_URL` | `https://openrouter.ai/api/v1` | OpenRouter endpoint |
 
 ## Docker (Postgres flavour)
 
 ```bash
 docker compose up --build    # db + api :8000 + web :5173
+```
+
+## Production deployment
+
+- **Backend**: Docker image on **Hugging Face Spaces** (`Dockerfile.api`).
+  HF Spaces provides a persistent `/data` directory (survives restarts) and
+  sets a `PORT` env var at runtime, which the Dockerfile already handles via
+  `${PORT:-8000}`. Add all API keys (`GROQ_API_KEY`, `GEMINI_API_KEY`,
+  `OPENROUTER_API_KEY`, etc.) in the Space's *Secrets* tab.
+- **Frontend**: **Vercel** (`frontend/vercel.json`). All `/api/*` requests are
+  rewritten to the HF Space URL. After the Space is live, replace the
+  placeholder in `frontend/vercel.json` with the actual Space URL.
+
+```bash
+# Local smoke test
+python -m pytest tests -q
+cd frontend && npm run build
 ```
 
 ## Project layout

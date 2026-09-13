@@ -1,0 +1,19 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://<HF_SPACE_USERNAME>-<HF_SPACE_NAME>.hf.space/api/:path*"
+    }
+  ],
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_API_URL": "https://<HF_SPACE_USERNAME>-<HF_SPACE_NAME>.hf.space"
+    }
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}

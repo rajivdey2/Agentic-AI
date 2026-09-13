@@ -3,7 +3,7 @@
 
 > Proactively detect disruptions, replan deliveries, and keep the retailer within budget/carbon caps while protecting the on-time SLA — with a real constraint verification step and a human-escalation path.
 
-Generated: `2026-09-12T13:23:07.490715+00:00` · sim day `0` · `8` events appended
+Generated: `2026-09-13T10:58:39.055315+00:00` · sim day `0` · `8` events appended
 
 ---
 
@@ -42,7 +42,7 @@ Generated: `2026-09-12T13:23:07.490715+00:00` · sim day `0` · `8` events appen
 | detect | 0 | 1 constraint violation(s) detected |
 | retrieve | 0 | Retrieved 9 candidate plan(s) |
 | optimize | 0 | Solver status: optimal; selected 1 plan(s) |
-| decide | 0 | Decision: PLAN-O-3-purchase-V-MUM-R_MUM_MUM (groq) · \`PLAN-O-3-purchase-V-MUM-R_MUM_MUM\` |
+| decide | 0 | Decision: PLAN-O-3-purchase-V-MUM-R_MUM_MUM (deterministic-fallback) · \`PLAN-O-3-purchase-V-MUM-R_MUM_MUM\` |
 | execute | 0 | Executed 2 command(s) |
 | verify | 0 | Constraints satisfied ✓ · **PASS** |
 
@@ -65,7 +65,7 @@ Generated: `2026-09-12T13:23:07.490715+00:00` · sim day `0` · `8` events appen
 | detect | 0 | 1 constraint violation(s) detected |
 | retrieve | 0 | Retrieved 8 candidate plan(s) |
 | optimize | 0 | Solver status: optimal; selected 1 plan(s) |
-| decide | 0 | Decision: PLAN-O-3-allocate-WH-CHN-R_CHN_MUM (groq) · \`PLAN-O-3-allocate-WH-CHN-R_CHN_MUM\` |
+| decide | 0 | Decision: PLAN-O-3-allocate-WH-CHN-R_CHN_MUM (deterministic-fallback) · \`PLAN-O-3-allocate-WH-CHN-R_CHN_MUM\` |
 | execute | 0 | Executed 2 command(s) |
 | verify | 0 | Constraints satisfied ✓ · **PASS** |
 

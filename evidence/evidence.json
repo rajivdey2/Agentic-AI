@@ -606,7 +606,7 @@
   "event_count": 8,
   "events": [
     {
-      "created_at": "2026-09-12T13:23:04.565159+00:00",
+      "created_at": "2026-09-13T10:58:37.437177+00:00",
       "day": 0,
       "id": 1,
       "payload": {
@@ -1148,7 +1148,7 @@
       "type": "seed"
     },
     {
-      "created_at": "2026-09-12T13:23:04.584856+00:00",
+      "created_at": "2026-09-13T10:58:37.446474+00:00",
       "day": 0,
       "id": 2,
       "payload": {
@@ -1159,7 +1159,7 @@
       "type": "shipment_delay"
     },
     {
-      "created_at": "2026-09-12T13:23:06.215833+00:00",
+      "created_at": "2026-09-13T10:58:38.861425+00:00",
       "day": 0,
       "id": 3,
       "payload": {
@@ -1169,13 +1169,13 @@
       "type": "shipment_cancel"
     },
     {
-      "created_at": "2026-09-12T13:23:06.256289+00:00",
+      "created_at": "2026-09-13T10:58:38.867883+00:00",
       "day": 0,
       "id": 4,
       "payload": {
         "order_id": "O-3",
         "qty": 200,
-        "reason": "This plan delivers the SKU within a day, meeting the tight delivery requirement, while incurring the lowest total cost ($1,300) and carbon f",
+        "reason": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and co",
         "route_id": "R_MUM_MUM",
         "vendor_id": "V-MUM"
       },
@@ -1183,7 +1183,7 @@
       "type": "place_order"
     },
     {
-      "created_at": "2026-09-12T13:23:06.282540+00:00",
+      "created_at": "2026-09-13T10:58:38.876833+00:00",
       "day": 0,
       "id": 5,
       "payload": {
@@ -1193,7 +1193,7 @@
       "type": "shipment_loss"
     },
     {
-      "created_at": "2026-09-12T13:23:06.293897+00:00",
+      "created_at": "2026-09-13T10:58:38.881834+00:00",
       "day": 0,
       "id": 6,
       "payload": {
@@ -1204,7 +1204,7 @@
       "type": "vendor_capacity_drop"
     },
     {
-      "created_at": "2026-09-12T13:23:07.462929+00:00",
+      "created_at": "2026-09-13T10:58:39.041412+00:00",
       "day": 0,
       "id": 7,
       "payload": {
@@ -1214,13 +1214,13 @@
       "type": "shipment_cancel"
     },
     {
-      "created_at": "2026-09-12T13:23:07.474789+00:00",
+      "created_at": "2026-09-13T10:58:39.046728+00:00",
       "day": 0,
       "id": 8,
       "payload": {
         "order_id": "O-3",
         "qty": 200,
-        "reason": "This plan delivers the SKU in 4 days while costing only 1600 and generating 400 units of carbon, yielding the lowest combined score of all c",
+        "reason": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and co",
         "route_id": "R_CHN_MUM",
         "warehouse_id": "WH-CHN"
       },
@@ -1235,7 +1235,7 @@
     "team": "SystemX",
     "title": "Autonomous Retail Supply-Chain Recovery Agent"
   },
-  "generated_at": "2026-09-12T13:23:07.490715+00:00",
+  "generated_at": "2026-09-13T10:58:39.055315+00:00",
   "issues": [],
   "kpis": {
     "at_risk_orders": 0,
@@ -1297,7 +1297,7 @@
           "params": {
             "order_id": "O-3",
             "qty": 200,
-            "reason": "This plan delivers the SKU within a day, meeting the tight delivery requirement, while incurring the lowest total cost ($1,300) and carbon f",
+            "reason": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and co",
             "route_id": "R_MUM_MUM",
             "vendor_id": "V-MUM"
           },
@@ -1604,10 +1604,11 @@
       "day": 0,
       "decision": {
         "choice": "PLAN-O-3-purchase-V-MUM-R_MUM_MUM",
-        "justification": "This plan delivers the SKU within a day, meeting the tight delivery requirement, while incurring the lowest total cost ($1,300) and carbon footprint (40\u202fkg CO\u2082) among all candidates. The combination of immediate availability and minimal environmental impact yields the best overall trade\u2011off.",
-        "latency_ms": 1012,
-        "model": "openai/gpt-oss-120b",
-        "provider": "groq",
+        "justification": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and constraint caps.",
+        "latency_ms": 0,
+        "llm_error": "HTTPStatusError: openrouter: no model accepted (last status 429): Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day",
+        "model": "none",
+        "provider": "deterministic-fallback",
         "selected": [
           {
             "action": "place_order",
@@ -1650,7 +1651,7 @@
         {
           "action": "cancel_shipment",
           "event": {
-            "created_at": "2026-09-12T13:23:06.215833+00:00",
+            "created_at": "2026-09-13T10:58:38.861425+00:00",
             "day": 0,
             "id": 3,
             "payload": {
@@ -1666,13 +1667,13 @@
         {
           "action": "place_order",
           "event": {
-            "created_at": "2026-09-12T13:23:06.256289+00:00",
+            "created_at": "2026-09-13T10:58:38.867883+00:00",
             "day": 0,
             "id": 4,
             "payload": {
               "order_id": "O-3",
               "qty": 200,
-              "reason": "This plan delivers the SKU within a day, meeting the tight delivery requirement, while incurring the lowest total cost ($1,300) and carbon f",
+              "reason": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and co",
               "route_id": "R_MUM_MUM",
               "vendor_id": "V-MUM"
             },
@@ -1682,7 +1683,7 @@
           "params": {
             "order_id": "O-3",
             "qty": 200,
-            "reason": "This plan delivers the SKU within a day, meeting the tight delivery requirement, while incurring the lowest total cost ($1,300) and carbon f",
+            "reason": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and co",
             "route_id": "R_MUM_MUM",
             "vendor_id": "V-MUM"
           }
@@ -2362,7 +2363,7 @@
           "sku": "SKU-C"
         }
       ],
-      "run_id": "run-48a3e7a927",
+      "run_id": "run-a5ba219bc8",
       "solver": {
         "delta_carbon": -360.0,
         "delta_cost": -1500.0,
@@ -2756,9 +2757,9 @@
           ],
           "choice": "PLAN-O-3-purchase-V-MUM-R_MUM_MUM",
           "day": 0,
-          "justification": "This plan delivers the SKU within a day, meeting the tight delivery requirement, while incurring the lowest total cost ($1,300) and carbon footprint (40\u202fkg CO\u2082) among all candidates. The combination of immediate availability and minimal environmental impact yields the best overall trade\u2011off.",
+          "justification": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and constraint caps.",
           "step": "decide",
-          "summary": "Decision: PLAN-O-3-purchase-V-MUM-R_MUM_MUM (groq)"
+          "summary": "Decision: PLAN-O-3-purchase-V-MUM-R_MUM_MUM (deterministic-fallback)"
         },
         {
           "day": 0,
@@ -2835,7 +2836,7 @@
           "params": {
             "order_id": "O-3",
             "qty": 200,
-            "reason": "This plan delivers the SKU in 4 days while costing only 1600 and generating 400 units of carbon, yielding the lowest combined score of all c",
+            "reason": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and co",
             "route_id": "R_CHN_MUM",
             "warehouse_id": "WH-CHN"
           },
@@ -3111,10 +3112,11 @@
       "day": 0,
       "decision": {
         "choice": "PLAN-O-3-allocate-WH-CHN-R_CHN_MUM",
-        "justification": "This plan delivers the SKU in 4 days while costing only 1600 and generating 400 units of carbon, yielding the lowest combined score of all candidates. It provides an acceptable delivery window with the cheapest and most carbon\u2011efficient option compared to the higher\u2011cost purchase alternatives.",
-        "latency_ms": 1146,
-        "model": "openai/gpt-oss-120b",
-        "provider": "groq",
+        "justification": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and constraint caps.",
+        "latency_ms": 0,
+        "llm_error": "HTTPStatusError: openrouter: no model accepted (last status 429): Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day",
+        "model": "none",
+        "provider": "deterministic-fallback",
         "selected": [
           {
             "action": "allocate",
@@ -3157,7 +3159,7 @@
         {
           "action": "cancel_shipment",
           "event": {
-            "created_at": "2026-09-12T13:23:07.462929+00:00",
+            "created_at": "2026-09-13T10:58:39.041412+00:00",
             "day": 0,
             "id": 7,
             "payload": {
@@ -3173,13 +3175,13 @@
         {
           "action": "allocate_inventory",
           "event": {
-            "created_at": "2026-09-12T13:23:07.474789+00:00",
+            "created_at": "2026-09-13T10:58:39.046728+00:00",
             "day": 0,
             "id": 8,
             "payload": {
               "order_id": "O-3",
               "qty": 200,
-              "reason": "This plan delivers the SKU in 4 days while costing only 1600 and generating 400 units of carbon, yielding the lowest combined score of all c",
+              "reason": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and co",
               "route_id": "R_CHN_MUM",
               "warehouse_id": "WH-CHN"
             },
@@ -3189,7 +3191,7 @@
           "params": {
             "order_id": "O-3",
             "qty": 200,
-            "reason": "This plan delivers the SKU in 4 days while costing only 1600 and generating 400 units of carbon, yielding the lowest combined score of all c",
+            "reason": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and co",
             "route_id": "R_CHN_MUM",
             "warehouse_id": "WH-CHN"
           }
@@ -3900,7 +3902,7 @@
           "sku": "SKU-C"
         }
       ],
-      "run_id": "run-f4cfcb7b1d",
+      "run_id": "run-34e86813ca",
       "solver": {
         "delta_carbon": 400.0,
         "delta_cost": 1600.0,
@@ -4263,9 +4265,9 @@
           ],
           "choice": "PLAN-O-3-allocate-WH-CHN-R_CHN_MUM",
           "day": 0,
-          "justification": "This plan delivers the SKU in 4 days while costing only 1600 and generating 400 units of carbon, yielding the lowest combined score of all candidates. It provides an acceptable delivery window with the cheapest and most carbon\u2011efficient option compared to the higher\u2011cost purchase alternatives.",
+          "justification": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and constraint caps.",
           "step": "decide",
-          "summary": "Decision: PLAN-O-3-allocate-WH-CHN-R_CHN_MUM (groq)"
+          "summary": "Decision: PLAN-O-3-allocate-WH-CHN-R_CHN_MUM (deterministic-fallback)"
         },
         {
           "day": 0,
@@ -4961,7 +4963,7 @@
     {
       "events": [
         {
-          "created_at": "2026-09-12T13:23:04.584856+00:00",
+          "created_at": "2026-09-13T10:58:37.446474+00:00",
           "day": 0,
           "id": 2,
           "payload": {
@@ -4978,10 +4980,11 @@
       "day": 0,
       "decision": {
         "choice": "PLAN-O-3-purchase-V-MUM-R_MUM_MUM",
-        "justification": "This plan delivers the SKU within a day, meeting the tight delivery requirement, while incurring the lowest total cost ($1,300) and carbon footprint (40\u202fkg CO\u2082) among all candidates. The combination of immediate availability and minimal environmental impact yields the best overall trade\u2011off.",
-        "latency_ms": 1012,
-        "model": "openai/gpt-oss-120b",
-        "provider": "groq",
+        "justification": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and constraint caps.",
+        "latency_ms": 0,
+        "llm_error": "HTTPStatusError: openrouter: no model accepted (last status 429): Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day",
+        "model": "none",
+        "provider": "deterministic-fallback",
         "selected": [
           {
             "action": "place_order",
@@ -5021,7 +5024,7 @@
       },
       "label": "Agent run #1 \u2014 replan to re-secure O-3",
       "message": "Constraints satisfied \u2713",
-      "run_id": "run-48a3e7a927",
+      "run_id": "run-a5ba219bc8",
       "solver": {
         "excluded": [],
         "ranked": [
@@ -5410,9 +5413,9 @@
           ],
           "choice": "PLAN-O-3-purchase-V-MUM-R_MUM_MUM",
           "day": 0,
-          "justification": "This plan delivers the SKU within a day, meeting the tight delivery requirement, while incurring the lowest total cost ($1,300) and carbon footprint (40\u202fkg CO\u2082) among all candidates. The combination of immediate availability and minimal environmental impact yields the best overall trade\u2011off.",
+          "justification": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and constraint caps.",
           "step": "decide",
-          "summary": "Decision: PLAN-O-3-purchase-V-MUM-R_MUM_MUM (groq)"
+          "summary": "Decision: PLAN-O-3-purchase-V-MUM-R_MUM_MUM (deterministic-fallback)"
         },
         {
           "day": 0,
@@ -6085,7 +6088,7 @@
     {
       "events": [
         {
-          "created_at": "2026-09-12T13:23:06.282540+00:00",
+          "created_at": "2026-09-13T10:58:38.876833+00:00",
           "day": 0,
           "id": 5,
           "payload": {
@@ -6095,7 +6098,7 @@
           "type": "shipment_loss"
         },
         {
-          "created_at": "2026-09-12T13:23:06.293897+00:00",
+          "created_at": "2026-09-13T10:58:38.881834+00:00",
           "day": 0,
           "id": 6,
           "payload": {
@@ -6112,10 +6115,11 @@
       "day": 0,
       "decision": {
         "choice": "PLAN-O-3-allocate-WH-CHN-R_CHN_MUM",
-        "justification": "This plan delivers the SKU in 4 days while costing only 1600 and generating 400 units of carbon, yielding the lowest combined score of all candidates. It provides an acceptable delivery window with the cheapest and most carbon\u2011efficient option compared to the higher\u2011cost purchase alternatives.",
-        "latency_ms": 1146,
-        "model": "openai/gpt-oss-120b",
-        "provider": "groq",
+        "justification": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and constraint caps.",
+        "latency_ms": 0,
+        "llm_error": "HTTPStatusError: openrouter: no model accepted (last status 429): Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day",
+        "model": "none",
+        "provider": "deterministic-fallback",
         "selected": [
           {
             "action": "allocate",
@@ -6155,7 +6159,7 @@
       },
       "label": "Agent run #2 \u2014 replan after loss + capacity drop",
       "message": "Constraints satisfied \u2713",
-      "run_id": "run-f4cfcb7b1d",
+      "run_id": "run-34e86813ca",
       "solver": {
         "excluded": [
           {
@@ -6513,9 +6517,9 @@
           ],
           "choice": "PLAN-O-3-allocate-WH-CHN-R_CHN_MUM",
           "day": 0,
-          "justification": "This plan delivers the SKU in 4 days while costing only 1600 and generating 400 units of carbon, yielding the lowest combined score of all candidates. It provides an acceptable delivery window with the cheapest and most carbon\u2011efficient option compared to the higher\u2011cost purchase alternatives.",
+          "justification": "Deterministic fallback: the optimizer selected the plan with the lowest weighted cost/time/carbon trade-off while respecting capacity and constraint caps.",
           "step": "decide",
-          "summary": "Decision: PLAN-O-3-allocate-WH-CHN-R_CHN_MUM (groq)"
+          "summary": "Decision: PLAN-O-3-allocate-WH-CHN-R_CHN_MUM (deterministic-fallback)"
         },
         {
           "day": 0,

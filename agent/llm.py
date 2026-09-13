@@ -9,6 +9,7 @@ live demo.
 from __future__ import annotations
 
 import json
+import re
 import time
 from typing import Any
 
@@ -21,6 +22,12 @@ from config import (
     GROQ_API_KEY,
     GROQ_MODEL,
     GROQ_BASE_URL,
+    GEMINI_API_KEY,
+    GEMINI_MODEL,
+    GEMINI_BASE_URL,
+    OPENROUTER_API_KEY,
+    OPENROUTER_MODEL,
+    OPENROUTER_BASE_URL,
 )
 
 # Model ids are tried in order; account/plans differ on availability and
@@ -33,6 +40,8 @@ _ANTHROPIC_MODELS = [
     "claude-sonnet-4-20250514",
 ]
 _OPENAI_MODELS = ["gpt-4o-mini", "gpt-4o"]
+_GEMINI_MODELS = ["gemini-3.8-flash"]
+_OPENROUTER_MODELS = ["inclusionai/ling-3.0-flash-vl:free"]
 
 
 def _pick_default(prompt: dict[str, Any]) -> dict[str, Any]:
@@ -72,9 +81,41 @@ def _anthropic_prompt(prompt: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _extract_json(text: str) -> dict[str, Any]:
+    """Parse a JSON object out of a model reply, tolerating ```json fences."""
+    text = str(text or "").strip()
+    text = re.sub(r"^```(?:json)?\s*", "", text)
+    text = re.sub(r"\s*```$", "", text)
+    start, end = text.find("{"), text.rfind("}")
+    if start != -1 and end != -1:
+        text = text[start:end + 1]
+    return json.loads(text)
+
+
+def _error_detail(r: Any) -> str:
+    """Best-effort extraction of an API error message, tolerating odd bodies."""
+    try:
+        body = r.json()
+    except Exception:
+        return r.text[:200]
+    if isinstance(body, dict):
+        err = body.get("error")
+        if isinstance(err, dict) and err.get("message"):
+            return str(err["message"])[:200]
+        if isinstance(err, str):
+            return err[:200]
+    return r.text[:200]
+
+
 def _call_provider(provider: str, prompt: dict[str, Any], api_key: str) -> dict[str, Any]:
-    base = GROQ_BASE_URL if provider == "groq" else "https://api.openai.com/v1"
-    models = GROQ_MODEL if provider == "groq" else _OPENAI_MODELS
+    if provider == "groq":
+        base, models = GROQ_BASE_URL, GROQ_MODEL
+    elif provider == "gemini":
+        base, models = GEMINI_BASE_URL, GEMINI_MODEL
+    elif provider == "openrouter":
+        base, models = OPENROUTER_BASE_URL, OPENROUTER_MODEL
+    else:
+        base, models = "https://api.openai.com/v1", _OPENAI_MODELS
     user_content = (
         "You are a supply chain recovery agent explaining your recovery "
         "decisions to a human operator. The optimizer already selected a set "
@@ -104,13 +145,13 @@ def _call_provider(provider: str, prompt: dict[str, Any], api_key: str) -> dict[
                     result = r.json()
                     result["_model"] = model
                     return result
-                last_detail = r.json().get("error", {}).get("message", r.text[:200])
+                last_detail = _error_detail(r)
             raise httpx.HTTPStatusError(
                 f"Anthropic: no model accepted (last status {last_status}): {last_detail}",
                 request=None, response=None)
-    else:  # openai-compatible (openai / groq)
+    else:  # openai-compatible (openai / groq / gemini / openrouter)
         req = {
-            "max_tokens": 300,
+            "max_tokens": 2048 if provider in ("gemini", "openrouter") else 300,
             "messages": [{"role": "user", "content": user_content}],
         }
         with httpx.Client(timeout=LLM_TIMEOUT_SECONDS) as client:
@@ -127,10 +168,10 @@ def _call_provider(provider: str, prompt: dict[str, Any], api_key: str) -> dict[
                 last_status = r.status_code
                 if r.status_code == 200:
                     content = r.json()["choices"][0]["message"]["content"]
-                    parsed = json.loads(content)
+                    parsed = _extract_json(content)
                     parsed["_model"] = model
                     return parsed
-                last_detail = r.json().get("error", {}).get("message", r.text[:200])
+                last_detail = _error_detail(r)
             raise httpx.HTTPStatusError(
                 f"{provider}: no model accepted (last status {last_status}): {last_detail}",
                 request=None, response=None)
@@ -142,8 +183,13 @@ def llm_decide(client: Any, prompt: dict[str, Any], default: dict[str, Any]) -> 
         default["llm_error"] = "llm disabled"
         return default
 
-    api_key = ANTHROPIC_API_KEY or GROQ_API_KEY or OPENAI_API_KEY
-    if GROQ_API_KEY:
+    api_key = (OPENROUTER_API_KEY or GEMINI_API_KEY or ANTHROPIC_API_KEY
+               or GROQ_API_KEY or OPENAI_API_KEY)
+    if OPENROUTER_API_KEY:
+        provider, api_key = "openrouter", OPENROUTER_API_KEY
+    elif GEMINI_API_KEY:
+        provider, api_key = "gemini", GEMINI_API_KEY
+    elif GROQ_API_KEY:
         provider, api_key = "groq", GROQ_API_KEY
     elif ANTHROPIC_API_KEY:
         provider, api_key = "anthropic", ANTHROPIC_API_KEY
@@ -151,7 +197,7 @@ def llm_decide(client: Any, prompt: dict[str, Any], default: dict[str, Any]) -> 
         provider, api_key = "openai", OPENAI_API_KEY
     else:
         provider = ""
-    if not api_key or provider not in ("anthropic", "openai", "groq"):
+    if not api_key or provider not in ("anthropic", "openai", "groq", "gemini", "openrouter"):
         default["llm_error"] = "no api key configured in the server process"
         return default
 

@@ -18,3 +18,7 @@ frontend/dist/
 # OS / editor
 .DS_Store
 Thumbs.db
+
+
+.opencode
+.kilo
